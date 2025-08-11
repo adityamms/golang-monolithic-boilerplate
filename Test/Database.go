@@ -3,12 +3,13 @@ package Test
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/mahdidl/golang_boilerplate/Common/Config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"time"
 )
 
 type RedisConfig struct {
@@ -49,27 +50,6 @@ func OpenTestingDatabase() {
 	Config.PermissionCollection = Config.DBMongo.Collection("Permission")
 	Config.RolePermissionCollection = Config.DBMongo.Collection("RolePermission")
 }
-
-//func OpenTestingRedis() {
-//
-//	config := Config.RedisConfig{}
-//	if parseError := cleanenv.ReadConfig(".test.env", &config); parseError != nil {
-//		fmt.Errorf("parsing config: %w", parseError)
-//	}
-//
-//	client := redis.NewClient(&redis.Options{
-//		Addr:     config.Host,
-//		Password: config.Password,
-//		DB:       0,
-//	})
-//
-//	pong, err := client.Ping().Result()
-//	if err != nil {
-//		log.Fatalf("cannot connect to redis : %s ", err)
-//	}
-//	Redis = client
-//	fmt.Println(pong, err)
-//}
 
 func connect(uri string) (*mongo.Client, context.Context,
 	context.CancelFunc, error) {

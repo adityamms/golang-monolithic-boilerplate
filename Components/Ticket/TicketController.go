@@ -5,8 +5,8 @@ import (
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	General "github.com/mahdidl/golang_boilerplate/Common/Response"
 	"github.com/mahdidl/golang_boilerplate/Common/Validator"
-	Request "github.com/mahdidl/golang_boilerplate/Components/Ticket/Request"
-	Response "github.com/mahdidl/golang_boilerplate/Components/Ticket/Response"
+	"github.com/mahdidl/golang_boilerplate/dto"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"log"
@@ -23,7 +23,7 @@ func NewTicketController(ticketService *TicketService) *TicketController {
 }
 
 func (ticketControler *TicketController) CreateTicket(context *gin.Context) {
-	var ticketRequest Request.CreateTicketRequest
+	var ticketRequest dto.CreateTicketRequest
 	Helper.Decode(context.Request, &ticketRequest)
 
 	validationError := Validator.ValidationCheck(ticketRequest)
@@ -53,6 +53,6 @@ func (ticketControler *TicketController) CreateTicket(context *gin.Context) {
 
 	// all ok
 	// create general response
-	response := General.GeneralResponse{Error: false, Message: "ticket have been created", Data: Response.CreateTicketResponse{Message: ticketResponse.Message, Subject: ticketResponse.Subject, Image: ticketResponse.Image}}
+	response := General.GeneralResponse{Error: false, Message: "ticket have been created", Data: dto.CreateTicketResponse{Message: ticketResponse.Message, Subject: ticketResponse.Subject, Image: ticketResponse.Image}}
 	context.JSON(http.StatusOK, gin.H{"response": response})
 }

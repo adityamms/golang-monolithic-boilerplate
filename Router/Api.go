@@ -12,8 +12,8 @@ import (
 	"github.com/mahdidl/golang_boilerplate/Components/UserRole"
 	"github.com/mahdidl/golang_boilerplate/docs"
 
-	"github.com/swaggo/files"       // swagger embed files
-	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 
 	"net/http"
 )
@@ -52,6 +52,7 @@ func Routes(app *gin.Engine) {
 	userService := User.NewUserService(userRepository)
 	userController := User.NewUserController(userService)
 	userRouter := router.Group(usersPostfix).Use(Middleware.AuthMiddleware())
+
 	{
 		// Get Requests
 		userRouter.GET("", userController.GetAllUsers)

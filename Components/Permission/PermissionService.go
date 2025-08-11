@@ -1,8 +1,7 @@
 package Permission
 
 import (
-	Request "github.com/mahdidl/golang_boilerplate/Components/Permission/Request"
-	Response "github.com/mahdidl/golang_boilerplate/Components/Permission/Response"
+	"github.com/mahdidl/golang_boilerplate/dto"
 )
 
 type PermissionService struct {
@@ -13,21 +12,21 @@ func NewPermissionService(permissionRepository *PermissionRepository) *Permissio
 	return &PermissionService{permissionRepository: permissionRepository}
 }
 
-func (permissionService PermissionService) CreateNewPermission(request Request.CreatePermission) (response Response.CreatePermission, err error) {
+func (permissionService PermissionService) CreateNewPermission(request dto.CreatePermissionReq) (response dto.CreatePermissionRes, err error) {
 
 	permission, err := permissionService.permissionRepository.CreateNewPermission(request)
 	if err != nil {
-		return Response.CreatePermission{}, err
+		return dto.CreatePermissionRes{}, err
 	}
 
-	return Response.CreatePermission{ID: permission.Id, Name: permission.Name}, nil
+	return dto.CreatePermissionRes{ID: permission.Id, Name: permission.Name}, nil
 }
 
-func (permissionService PermissionService) GetPermissions(request Request.GetAllPermissions) (response Response.GetPermissions, err error) {
+func (permissionService PermissionService) GetPermissions(request dto.GetAllPermissionsReq) (response dto.GetPermissionsRes, err error) {
 	permissions, err := permissionService.permissionRepository.GetPermissions(request)
 	if err != nil {
-		return Response.GetPermissions{}, err
+		return dto.GetPermissionsRes{}, err
 	}
 
-	return Response.GetPermissions{Permissions: permissions}, nil
+	return dto.GetPermissionsRes{Permissions: permissions}, nil
 }

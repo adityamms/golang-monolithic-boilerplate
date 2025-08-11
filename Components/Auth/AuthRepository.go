@@ -2,10 +2,11 @@ package Controller
 
 import (
 	"fmt"
+
 	"github.com/mahdidl/golang_boilerplate/Common/Config"
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	"github.com/mahdidl/golang_boilerplate/Components/User/Entity"
-	"github.com/mahdidl/golang_boilerplate/Components/User/Request"
+	"github.com/mahdidl/golang_boilerplate/dto"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -17,7 +18,7 @@ func NewAuthRepository() *AuthRepository {
 }
 
 // LoginUser for login users
-func (authRepository *AuthRepository) LoginUser(loginUserRequest Request.LoginUserRequest) (Entity.User, error) {
+func (authRepository *AuthRepository) LoginUser(loginUserRequest dto.LoginUserRequest) (Entity.User, error) {
 	user := Entity.User{}
 
 	queryError := Config.UserCollection.FindOne(Config.DBContext, bson.M{"UserName": loginUserRequest.UserName}).Decode(&user)

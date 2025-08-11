@@ -3,13 +3,14 @@ package RolePermission
 import (
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	"github.com/mahdidl/golang_boilerplate/Components/Permission"
-	"github.com/mahdidl/golang_boilerplate/Components/Permission/Request"
 	"github.com/mahdidl/golang_boilerplate/Components/Role"
-	RequestRole "github.com/mahdidl/golang_boilerplate/Components/Role/Request"
+	"github.com/mahdidl/golang_boilerplate/dto"
+
+	"testing"
+
 	"github.com/mahdidl/golang_boilerplate/Test"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"testing"
 )
 
 var rolePermissionRepository *RolePermissionRepository
@@ -25,7 +26,7 @@ func init() {
 
 func TestRolePermissionRepository_Attach(t *testing.T) {
 	roleName := Helper.RandomString(5)
-	createRoleRequest := RequestRole.CreateRole{Name: roleName}
+	createRoleRequest := dto.CreateRoleReq{Name: roleName}
 	role, err := roleRepository.Create(createRoleRequest)
 
 	require.NoError(t, err)
@@ -35,7 +36,7 @@ func TestRolePermissionRepository_Attach(t *testing.T) {
 	require.Empty(t, role.PermissionsId)
 
 	permissionName := Helper.RandomString(5)
-	createPermissionRequest := Request.CreatePermission{Name: permissionName}
+	createPermissionRequest := dto.CreatePermissionReq{Name: permissionName}
 	permission, err := permissionRepository.CreateNewPermission(createPermissionRequest)
 
 	require.NoError(t, err)
@@ -52,7 +53,7 @@ func TestRolePermissionRepository_Attach(t *testing.T) {
 
 func TestRolePermissionRepository_Detach(t *testing.T) {
 	roleName := Helper.RandomString(5)
-	createRoleRequest := RequestRole.CreateRole{Name: roleName}
+	createRoleRequest := dto.CreateRoleReq{Name: roleName}
 	role, err := roleRepository.Create(createRoleRequest)
 
 	require.NoError(t, err)
@@ -62,7 +63,7 @@ func TestRolePermissionRepository_Detach(t *testing.T) {
 	require.Empty(t, role.PermissionsId)
 
 	permissionName := Helper.RandomString(5)
-	createPermissionRequest := Request.CreatePermission{Name: permissionName}
+	createPermissionRequest := dto.CreatePermissionReq{Name: permissionName}
 	permission, err := permissionRepository.CreateNewPermission(createPermissionRequest)
 
 	require.NoError(t, err)

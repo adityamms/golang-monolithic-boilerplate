@@ -2,13 +2,15 @@ package Role
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mahdidl/golang_boilerplate/Common/Response"
 	"github.com/mahdidl/golang_boilerplate/Common/Validator"
 	_ "github.com/mahdidl/golang_boilerplate/Components/Role/Entity"
-	Request "github.com/mahdidl/golang_boilerplate/Components/Role/Request"
-	RoleResponse "github.com/mahdidl/golang_boilerplate/Components/Role/Response"
-	_ "github.com/mahdidl/golang_boilerplate/Components/Role/Response"
+
+	"github.com/mahdidl/golang_boilerplate/dto"
+
+	_ "github.com/mahdidl/golang_boilerplate/dto"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 )
@@ -26,7 +28,7 @@ func NewRoleController(service *RoleService) *RoleController {
 // @Tags         Role
 // @Accept       json
 // @Produce      json
-// @Param        CreateRoleRequest  body      Request.CreateRole  true  "Create role request"
+// @Param        CreateRoleRequest  body      dto.CreateRole  true  "Create role request"
 // @Success      200                {object}  Response.GeneralResponse{data=Entity.Role}
 // @Failure      400                {object}  Response.GeneralResponse{data=object} "create role"
 // @Router       /role/ [post]
@@ -34,7 +36,7 @@ func NewRoleController(service *RoleService) *RoleController {
 //
 // CreateRole is a handler function which is creating role
 func (roleController RoleController) CreateRole(context *gin.Context) {
-	var createRole Request.CreateRole
+	var createRole dto.CreateRoleReq
 
 	validationError := context.ShouldBindJSON(&createRole)
 	if validationError != nil {
@@ -72,7 +74,7 @@ func (roleController RoleController) CreateRole(context *gin.Context) {
 // @Tags         Role
 // @Accept       json
 // @Produce      json
-// @Param        GetAllRoleRequest  query      Request.GetAllRole  true  "get all roles with pagination"
+// @Param        GetAllRoleRequest  query      dto.GetAllRole  true  "get all roles with pagination"
 // @Success      200                {object}  Response.GeneralResponse{data=RoleResponse.GetAllRoles}
 // @Failure      400                {object}  Response.GeneralResponse{data=object} "create role"
 // @Router       /role/ [get]
@@ -80,7 +82,7 @@ func (roleController RoleController) CreateRole(context *gin.Context) {
 //
 // GetAllRoles is a handler function which is return all roles with pagination
 func (roleController *RoleController) GetAllRoles(context *gin.Context) {
-	var request Request.GetAllRole
+	var request dto.GetAllRoleReq
 	context.ShouldBindQuery(&request)
 	roleResponse, responseErr := roleController.RoleService.GetAll(request)
 	if responseErr != nil {
@@ -91,7 +93,7 @@ func (roleController *RoleController) GetAllRoles(context *gin.Context) {
 		return
 	}
 
-	var role RoleResponse.GetAllRoles
+	var role dto.GetAllRolesRes
 	role = roleResponse
 
 	response := Response.GeneralResponse{Error: false, Message: "successful", Data: role.Roles}
@@ -142,7 +144,7 @@ func (roleController *RoleController) GetRole(context *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        roleId  path      string  true  "update role with id"
-// @Param        UpdateRole  body      Request.UpdateRole  true  "update role model"
+// @Param        UpdateRole  body      dto.UpdateRole  true  "update role model"
 // @Success      200                {object}  Response.GeneralResponse{data=RoleResponse.GetRole}
 // @Failure      400                {object}  Response.GeneralResponse{data=object} "get role"
 // @Router       /role/{roleId} [patch]
@@ -150,7 +152,7 @@ func (roleController *RoleController) GetRole(context *gin.Context) {
 //
 // UpdateRole for updating role name
 func (roleController *RoleController) UpdateRole(context *gin.Context) {
-	var request Request.UpdateRole
+	var request dto.UpdateRoleReq
 	context.ShouldBindJSON(&request)
 
 	roleId := context.Param("roleId")

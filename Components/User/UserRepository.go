@@ -2,10 +2,11 @@ package Controller
 
 import (
 	"fmt"
+
 	"github.com/mahdidl/golang_boilerplate/Common/Config"
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	"github.com/mahdidl/golang_boilerplate/Components/User/Entity"
-	"github.com/mahdidl/golang_boilerplate/Components/User/Request"
+	"github.com/mahdidl/golang_boilerplate/dto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -22,7 +23,7 @@ func NewUserRepository() *UserRepository {
 }
 
 // CreateUser exec query for create new user in database
-func (userRepository *UserRepository) CreateUser(creatUserRequest Request.CreateUserRequest) (Entity.User, error) {
+func (userRepository *UserRepository) CreateUser(creatUserRequest dto.CreateUserRequest) (Entity.User, error) {
 	user := Entity.User{}
 
 	result, err := Config.UserCollection.InsertOne(Config.DBContext, Entity.User{ID: primitive.NewObjectID(), IsActive: true,
@@ -39,7 +40,7 @@ func (userRepository *UserRepository) CreateUser(creatUserRequest Request.Create
 }
 
 // LoginUser for login users
-func (userRepository *UserRepository) LoginUser(loginUserRequest Request.LoginUserRequest) (Entity.User, error) {
+func (userRepository *UserRepository) LoginUser(loginUserRequest dto.LoginUserRequest) (Entity.User, error) {
 	user := Entity.User{}
 
 	queryError := Config.UserCollection.FindOne(Config.DBContext, bson.M{"UserName": loginUserRequest.UserName}).Decode(&user)
@@ -54,7 +55,7 @@ func (userRepository *UserRepository) LoginUser(loginUserRequest Request.LoginUs
 }
 
 // CheckUserName check username exist or not
-func (userRepository *UserRepository) CheckUserName(creatUserRequest Request.CreateUserRequest) (Entity.User, error) {
+func (userRepository *UserRepository) CheckUserName(creatUserRequest dto.CreateUserRequest) (Entity.User, error) {
 	user := Entity.User{}
 
 	queryError := Config.UserCollection.FindOne(Config.DBContext, bson.M{"UserName": creatUserRequest.UserName}).Decode(&user)
@@ -90,7 +91,7 @@ func (usserRepository *UserRepository) GetUserById(id string) (Entity.User, erro
 	return user, queryError
 }
 
-func (usserRepository *UserRepository) UpdateUser(request Request.UpdateUserRequest, userId string) (Entity.User, error) {
+func (usserRepository *UserRepository) UpdateUser(request dto.UpdateUserRequest, userId string) (Entity.User, error) {
 	var user Entity.User
 
 	id1, err := primitive.ObjectIDFromHex(userId)
@@ -108,7 +109,7 @@ func (usserRepository *UserRepository) UpdateUser(request Request.UpdateUserRequ
 	return user, result
 }
 
-func (usserRepository *UserRepository) ChangePassword(request Request.ChangePasswordRequest, userId string) (Entity.User, error) {
+func (usserRepository *UserRepository) ChangePassword(request dto.ChangePasswordRequest, userId string) (Entity.User, error) {
 	var user Entity.User
 
 	id1, err := primitive.ObjectIDFromHex(userId)

@@ -1,15 +1,13 @@
 package Controller
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	"github.com/mahdidl/golang_boilerplate/Common/Response"
 	"github.com/mahdidl/golang_boilerplate/Common/Validator"
-	AuthRequest "github.com/mahdidl/golang_boilerplate/Components/Auth/Request"
-	AuthResponse "github.com/mahdidl/golang_boilerplate/Components/Auth/Response"
-	"github.com/mahdidl/golang_boilerplate/Components/User/Request"
-	UserResponse "github.com/mahdidl/golang_boilerplate/Components/User/Response"
-	"log"
+	"github.com/mahdidl/golang_boilerplate/dto"
 
 	"net/http"
 )
@@ -34,7 +32,7 @@ func NewAuthController(authService *AuthService) *AuthController {
 //
 // LoginUser for get access token
 func (authController *AuthController) AccessToken(context *gin.Context) {
-	var accessTokenReq AuthRequest.AccessTokenRequest
+	var accessTokenReq dto.AccessTokenRequest
 	Helper.Decode(context.Request, &accessTokenReq)
 
 	validationError := Validator.ValidationCheck(accessTokenReq)
@@ -54,7 +52,7 @@ func (authController *AuthController) AccessToken(context *gin.Context) {
 
 	// all ok
 	// create general response
-	response1 := Response.GeneralResponse{Error: false, Message: "successful", Data: AuthResponse.AccessTokenResponse{AccessToken: token}}
+	response1 := Response.GeneralResponse{Error: false, Message: "successful", Data: dto.AccessTokenResponse{AccessToken: token}}
 	context.JSON(http.StatusOK, gin.H{"response": response1})
 }
 
@@ -71,7 +69,7 @@ func (authController *AuthController) AccessToken(context *gin.Context) {
 //
 // LoginUser for get access token
 func (authController *AuthController) LoginUser(context *gin.Context) {
-	var userRequest Request.LoginUserRequest
+	var userRequest dto.LoginUserRequest
 	context.ShouldBindJSON(&userRequest)
 
 	validationError := Validator.ValidationCheck(userRequest)
@@ -91,7 +89,7 @@ func (authController *AuthController) LoginUser(context *gin.Context) {
 
 	// all ok
 	// create general response
-	var loginResponse UserResponse.LoginUserResponse
+	var loginResponse dto.LoginUserResponse
 	loginResponse = userResponse
 	response := Response.GeneralResponse{Error: false, Message: "your login is successful", Data: loginResponse}
 	context.JSON(http.StatusOK, gin.H{"response": response})

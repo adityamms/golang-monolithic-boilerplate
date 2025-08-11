@@ -2,7 +2,7 @@ package Controller
 
 import (
 	token "github.com/mahdidl/golang_boilerplate/Common/Token"
-	User "github.com/mahdidl/golang_boilerplate/Components/AuthUser/Request"
+	"github.com/mahdidl/golang_boilerplate/dto"
 )
 
 type AuthUserService struct {
@@ -13,7 +13,7 @@ func NewAuthUserService(authUserRepository *AuthUserRepository) *AuthUserService
 	return &AuthUserService{}
 }
 
-func (authUserService AuthUserService) LogoutUser(request User.LogoutRequest) (response string, err error) {
+func (authUserService AuthUserService) LogoutUser(request dto.LogoutRequest) (response string, err error) {
 	payload, _ := token.MakerPaseto.VerifyToken(request.Token)
 
 	err = authUserService.AuthUserRepository.LogOut(request, payload)

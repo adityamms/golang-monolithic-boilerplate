@@ -2,15 +2,16 @@ package Role
 
 import (
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/mahdidl/golang_boilerplate/Common/Config"
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	Entity "github.com/mahdidl/golang_boilerplate/Components/Role/Entity"
-	Request "github.com/mahdidl/golang_boilerplate/Components/Role/Request"
+	"github.com/mahdidl/golang_boilerplate/dto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
-	"time"
 )
 
 type RoleRepository struct {
@@ -20,7 +21,7 @@ func NewRoleRepository() *RoleRepository {
 	return &RoleRepository{}
 }
 
-func (roleRepository *RoleRepository) Create(request Request.CreateRole) (Entity.Role, error) {
+func (roleRepository *RoleRepository) Create(request dto.CreateRoleReq) (Entity.Role, error) {
 	role := Entity.Role{}
 	slicePermissionId := make([]primitive.ObjectID, 0)
 
@@ -36,7 +37,7 @@ func (roleRepository *RoleRepository) Create(request Request.CreateRole) (Entity
 	return role, err
 }
 
-func (roleRepository *RoleRepository) Get(request Request.GetAllRole) ([]Entity.Role, error) {
+func (roleRepository *RoleRepository) Get(request dto.GetAllRoleReq) ([]Entity.Role, error) {
 	var roles = make([]Entity.Role, 0)
 
 	roleCursor, queryError := Config.RoleCollection.Find(Config.DBContext, bson.M{}, Helper.NewMongoPaginate(request.Limit, request.Page).GetPaginatedOpts())
@@ -72,7 +73,7 @@ func (roleRepository RoleRepository) GetRoleById(Id string) (Entity.Role, error)
 	return role, nil
 }
 
-func (roleRepository RoleRepository) Update(request Request.UpdateRole, roleId string) (Entity.Role, error) {
+func (roleRepository RoleRepository) Update(request dto.UpdateRoleReq, roleId string) (Entity.Role, error) {
 	var role Entity.Role
 
 	id1, err := primitive.ObjectIDFromHex(roleId)

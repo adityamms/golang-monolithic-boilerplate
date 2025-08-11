@@ -1,12 +1,13 @@
 package Permission
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mahdidl/golang_boilerplate/Common/Response"
 	"github.com/mahdidl/golang_boilerplate/Common/Validator"
 	_ "github.com/mahdidl/golang_boilerplate/Components/Permission/Entity"
-	"github.com/mahdidl/golang_boilerplate/Components/Permission/Request"
-	"net/http"
+	"github.com/mahdidl/golang_boilerplate/dto"
 )
 
 type PermissionController struct {
@@ -30,7 +31,7 @@ func NewPermissionController(service *PermissionService) *PermissionController {
 //
 // CreatePermission is a handler function which is creating new permission
 func (permissionController *PermissionController) CreatePermission(context *gin.Context) {
-	var createPermission Request.CreatePermission
+	var createPermission dto.CreatePermissionReq
 
 	validationError := context.ShouldBindJSON(&createPermission)
 	if validationError != nil {
@@ -76,7 +77,7 @@ func (permissionController *PermissionController) CreatePermission(context *gin.
 //
 // GetPermissions is a handler function which is return permissions with pagination
 func (permissionController *PermissionController) GetPermissions(context *gin.Context) {
-	var request Request.GetAllPermissions
+	var request dto.GetAllPermissionsReq
 	context.ShouldBindQuery(&request)
 
 	permissionResponse, responseErr := permissionController.PermissionService.GetPermissions(request)

@@ -2,8 +2,7 @@ package Role
 
 import (
 	"github.com/mahdidl/golang_boilerplate/Components/Role/Entity"
-	"github.com/mahdidl/golang_boilerplate/Components/Role/Request"
-	"github.com/mahdidl/golang_boilerplate/Components/Role/Response"
+	"github.com/mahdidl/golang_boilerplate/dto"
 )
 
 type RoleService struct {
@@ -14,7 +13,7 @@ func NewRoleService(permissionRepository *RoleRepository) *RoleService {
 	return &RoleService{roleRepository: permissionRepository}
 }
 
-func (roleService *RoleService) Create(request Request.CreateRole) (response Entity.Role, err error) {
+func (roleService *RoleService) Create(request dto.CreateRoleReq) (response Entity.Role, err error) {
 
 	role, err := roleService.roleRepository.Create(request)
 	if err != nil {
@@ -24,38 +23,38 @@ func (roleService *RoleService) Create(request Request.CreateRole) (response Ent
 	return role, nil
 }
 
-func (roleService *RoleService) GetAll(request Request.GetAllRole) (response Response.GetAllRoles, err error) {
+func (roleService *RoleService) GetAll(request dto.GetAllRoleReq) (response dto.GetAllRolesRes, err error) {
 	roles, err := roleService.roleRepository.Get(request)
 	if err != nil {
-		return Response.GetAllRoles{}, err
+		return dto.GetAllRolesRes{}, err
 	}
 
-	return Response.GetAllRoles{Roles: roles}, nil
+	return dto.GetAllRolesRes{Roles: roles}, nil
 }
 
-func (roleService *RoleService) GetRoleById(Id string) (Response.GetRole, error) {
+func (roleService *RoleService) GetRoleById(Id string) (dto.GetRoleRes, error) {
 	roles, err := roleService.roleRepository.GetRoleById(Id)
 	if err != nil {
-		return Response.GetRole{}, err
+		return dto.GetRoleRes{}, err
 	}
 
-	return Response.GetRole{Roles: roles}, nil
+	return dto.GetRoleRes{Roles: roles}, nil
 }
 
-func (roleService *RoleService) Update(request Request.UpdateRole, roleId string) (Response.GetRole, error) {
+func (roleService *RoleService) Update(request dto.UpdateRoleReq, roleId string) (dto.GetRoleRes, error) {
 	role, err := roleService.roleRepository.Update(request, roleId)
 	if err != nil {
-		return Response.GetRole{}, err
+		return dto.GetRoleRes{}, err
 	}
 
-	return Response.GetRole{Roles: role}, nil
+	return dto.GetRoleRes{Roles: role}, nil
 }
 
-func (roleService *RoleService) Delete(roleId string) (Response.GetRole, error) {
+func (roleService *RoleService) Delete(roleId string) (dto.GetRoleRes, error) {
 	role, err := roleService.roleRepository.Delete(roleId)
 	if err != nil {
-		return Response.GetRole{}, err
+		return dto.GetRoleRes{}, err
 	}
 
-	return Response.GetRole{Roles: role}, nil
+	return dto.GetRoleRes{Roles: role}, nil
 }

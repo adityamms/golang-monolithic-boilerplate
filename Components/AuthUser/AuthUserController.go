@@ -5,7 +5,7 @@ import (
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	"github.com/mahdidl/golang_boilerplate/Common/Response"
 	"github.com/mahdidl/golang_boilerplate/Common/Validator"
-	Request "github.com/mahdidl/golang_boilerplate/Components/AuthUser/Request"
+	"github.com/mahdidl/golang_boilerplate/dto"
 
 	"log"
 
@@ -33,7 +33,7 @@ func NewAuthUserController(authUserService *AuthUserService) *AuthUserController
 //
 // Logout user with access token
 func (authUserController *AuthUserController) Logout(context *gin.Context) {
-	var userRequest Request.LogoutRequest
+	var userRequest dto.LogoutRequest
 	Helper.Decode(context.Request, &userRequest)
 
 	validationError := Validator.ValidationCheck(userRequest)

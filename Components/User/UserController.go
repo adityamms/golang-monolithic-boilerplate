@@ -2,11 +2,12 @@ package Controller
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mahdidl/golang_boilerplate/Common/Response"
 	"github.com/mahdidl/golang_boilerplate/Common/Validator"
-	"github.com/mahdidl/golang_boilerplate/Components/User/Request"
-	UserResponse "github.com/mahdidl/golang_boilerplate/Components/User/Response"
+	"github.com/mahdidl/golang_boilerplate/dto"
+	UserResponse "github.com/mahdidl/golang_boilerplate/dto"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"log"
@@ -26,14 +27,14 @@ func NewUserController(userService *UserService) *UserController {
 // @Tags         User
 // @Accept       json
 // @Produce      json
-// @Param        CreateUserRequest  body      Request.CreateUserRequest  true  "Create user request"
+// @Param        CreateUserRequest  body      dto.CreateUserRequest  true  "Create user request"
 // @Success      200                {object}  Response.GeneralResponse{data=Entity.User}
 // @Failure      400                {object}  Response.GeneralResponse{data=object} "when user exist or password < 8 character"
 // @Router       /user [post]
 //
 // CreateUser is a handler function which is creating user
 func (userControler *UserController) CreateUser(context *gin.Context) {
-	var userRequest Request.CreateUserRequest
+	var userRequest dto.CreateUserRequest
 
 	context.ShouldBindJSON(&userRequest)
 
@@ -71,7 +72,7 @@ func (userControler *UserController) CreateUser(context *gin.Context) {
 // @Tags         User
 // @Accept       json
 // @Produce      json
-// @Param        GetAllUserRequest  query      Request.GetAllUsers  true  "get all users request"
+// @Param        GetAllUserRequest  query      dto.GetAllUsers  true  "get all users request"
 // @Success      200                {object}  Response.GeneralResponse{data=UserResponse.ResponseAllUsers}
 // @Failure      400                {object}  Response.GeneralResponse{data=object} "when user not exist or password is incorrect"
 // @Failure      401                {object}  Response.GeneralResponse{data=object} "unauthorized"
@@ -80,7 +81,7 @@ func (userControler *UserController) CreateUser(context *gin.Context) {
 //
 // GetAllUsers return all users with pagination
 func (userController *UserController) GetAllUsers(context *gin.Context) {
-	var userRequest Request.GetAllUsers
+	var userRequest dto.GetAllUsers
 	context.ShouldBindQuery(&userRequest)
 
 	validationError := Validator.ValidationCheck(userRequest)
@@ -142,7 +143,7 @@ func (userController *UserController) GetUserById(context *gin.Context) {
 // @Tags         User
 // @Accept       json
 // @Produce      json
-// @Param        updateUser  body      Request.UpdateUserRequest  true  "update user request"
+// @Param        updateUser  body      dto.UpdateUserRequest  true  "update user request"
 // @Param        userId  path      string  true  "user id"
 // @Success      200                {object}  Response.GeneralResponse{data=Entity.User}
 // @Failure      400                {object}  Response.GeneralResponse{data=object} "when user not exist or id is incorrect"
@@ -152,7 +153,7 @@ func (userController *UserController) GetUserById(context *gin.Context) {
 //
 // UpdateUser for update user with any params that client sends
 func (userController *UserController) UpdateUser(context *gin.Context) {
-	var userRequest Request.UpdateUserRequest
+	var userRequest dto.UpdateUserRequest
 	context.ShouldBindJSON(&userRequest)
 
 	userId := context.Param("userId")
@@ -225,7 +226,7 @@ func (userController *UserController) ChangeActiveStatus(context *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        userId  path      string  true  "user id"
-// @Param        password  body      Request.ChangePasswordRequest  true  "change user password request"
+// @Param        password  body      dto.ChangePasswordRequest  true  "change user password request"
 // @Success      200                {object}  Response.GeneralResponse{data=Entity.User}
 // @Failure      400                {object}  Response.GeneralResponse{data=object} "when user not exist or id is incorrect or password in incorrect"
 // @Failure      401                {object}  Response.GeneralResponse{data=object} "unauthorized"
@@ -234,8 +235,8 @@ func (userController *UserController) ChangeActiveStatus(context *gin.Context) {
 //
 // ChangeActiveStatus for changing active and deactivate user
 func (userController *UserController) ChangePassword(context *gin.Context) {
-	var userRequest Request.ChangePasswordRequest
-	//Helper.Decode(context.Request, &userRequest)
+	var userRequest dto.ChangePasswordRequest
+	//Helper.Decode(context.dto, &userRequest)
 	context.ShouldBindJSON(&userRequest)
 
 	userId := context.Param("userId")

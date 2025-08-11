@@ -28,31 +28,31 @@ Golang Monolithic Boilerplate using Domain Driven Design handles authentication 
  │ / │
  └─┬─┘
    │
-   ├───────▶ Common ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ Configuration(s) (default values, env, middleware, token)
+   ├───────▶ Common ─ ─ ─ ─ Configuration(s), Env, Middleware, Token
    │
-   ├───────▶ Components ─ ─ ─ ─ All Components have Request ,Response ,Controller ,Service and Repository
+   ├───────▶ DTO ─ ─ ─ ─ Shared Request/Response Structs
+   │
+   ├───────▶ Components ─ ─ ─ ─ All Components have Handler + Repository
    │                   │ 
-   │                   └──┬──▶ Auth ─ ─ ─ ─ Login User and NewAccessToken
-   │                      │
-   │                      ├──▶ AuthUser ─ ─ ─ ─ Logout User
-   │                      │ 
-   │                      ├──▶ Permission ─ ─ ─ ─ Permission List
-   │                      │
-   │                      ├──▶ Role ─ ─ ─ ─ Create ,Reade ,Update Roles
-   │                      │
-   │                      ├──▶ RolePermission ─ ─ ─ ─ Attach and Detach Permission to Role
-   │                      │
-   │                      ├──▶ Ticket ─ ─ ─ ─ Create New User Ticket
-   │                      │
-   │                      ├──▶ User ─ ─ ─ ─ Create ,Reade ,Update User 
-   │                      │
-   │                      └──▶ UserRole ─ ─ ─ ─ Attach and Detach Role to User
+   │                   ├──▶ Auth ─ ─ ─ ─ Login User, NewAccessToken
+   │                   │      ├── handler.go   // Controller + Service merged
+   │                   │      └── repository.go
+   │                   │
+   │                   ├──▶ User ─ ─ ─ ─ Create, Read, Update User
+   │                   │      ├── handler.go
+   │                   │      └── repository.go
+   │                   │
+   │                   ├──▶ Role ─ ─ ─ ─ Manage Roles
+   │                   │      ├── handler.go
+   │                   │      └── repository.go
+   │                   │
+   │                   └──▶ ... other features ...
    │
-   ├───────▶ Docs ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ Swagger Files
+   ├───────▶ Docs ─ ─ ─ ─ ─ Swagger / API Spec
    │
-   ├───────▶ Router ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ 
+   ├───────▶ Router ─ ─ ─ ─ HTTP Routes
    │
-   ├───────▶ Test ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ Config Testing Database
+   ├───────▶ Test ─ ─ ─ ─ ─ Test DB & Unit Tests
 
 ```
 

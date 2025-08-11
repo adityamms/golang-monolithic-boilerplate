@@ -2,10 +2,11 @@ package Ticket
 
 import (
 	"fmt"
+
 	"github.com/mahdidl/golang_boilerplate/Common/Config"
 	"github.com/mahdidl/golang_boilerplate/Components/Ticket/Entity"
-	Ticket "github.com/mahdidl/golang_boilerplate/Components/Ticket/Request"
 	UserEntity "github.com/mahdidl/golang_boilerplate/Components/User/Entity"
+	Ticket "github.com/mahdidl/golang_boilerplate/dto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 

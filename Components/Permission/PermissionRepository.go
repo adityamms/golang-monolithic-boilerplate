@@ -1,13 +1,14 @@
 package Permission
 
 import (
+	"log"
+
 	"github.com/mahdidl/golang_boilerplate/Common/Config"
 	"github.com/mahdidl/golang_boilerplate/Common/Helper"
 	Entity "github.com/mahdidl/golang_boilerplate/Components/Permission/Entity"
-	Request "github.com/mahdidl/golang_boilerplate/Components/Permission/Request"
+	"github.com/mahdidl/golang_boilerplate/dto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"log"
 )
 
 type PermissionRepository struct {
@@ -17,7 +18,7 @@ func NewPermissionRepository() *PermissionRepository {
 	return &PermissionRepository{}
 }
 
-func (permissionRepository *PermissionRepository) CreateNewPermission(request Request.CreatePermission) (Entity.Permission, error) {
+func (permissionRepository *PermissionRepository) CreateNewPermission(request dto.CreatePermissionReq) (Entity.Permission, error) {
 	permission := Entity.Permission{}
 
 	result, err := Config.PermissionCollection.InsertOne(Config.DBContext, Entity.Permission{Id: primitive.NewObjectID(), Name: request.Name})
@@ -32,7 +33,7 @@ func (permissionRepository *PermissionRepository) CreateNewPermission(request Re
 	return permission, err
 }
 
-func (permissionRepository *PermissionRepository) GetPermissions(request Request.GetAllPermissions) ([]Entity.Permission, error) {
+func (permissionRepository *PermissionRepository) GetPermissions(request dto.GetAllPermissionsReq) ([]Entity.Permission, error) {
 	var permissions = make([]Entity.Permission, 0)
 
 	permissionCursor, queryError := Config.PermissionCollection.Find(Config.DBContext, bson.M{}, Helper.NewMongoPaginate(request.Limit, request.Page).GetPaginatedOpts())
