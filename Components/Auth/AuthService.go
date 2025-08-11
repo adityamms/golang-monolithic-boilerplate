@@ -52,3 +52,14 @@ func (authService *AuthService) LoginUser(loginUserRequest dto.LoginUserRequest)
 	// we need a transformer
 	return dto.LoginUserResponse{UserName: user.UserName, AccessToken: accessToken, RefreshToken: refreshToken, Id: user.ID.Hex()}, nil
 }
+
+func (authService *AuthService) LogoutUser(request dto.LogoutRequest) (response string, err error) {
+	payload, _ := token.MakerPaseto.VerifyToken(request.Token)
+
+	err = authService.authRepository.LogOut(request, payload)
+	if err != nil {
+		return "logout failed", err
+	}
+
+	return "logout successfully", err
+}

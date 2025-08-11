@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mahdidl/golang_boilerplate/Common/Middleware"
 	"github.com/mahdidl/golang_boilerplate/Common/Response"
 	"github.com/mahdidl/golang_boilerplate/Common/Validator"
 	"github.com/mahdidl/golang_boilerplate/dto"
@@ -20,6 +21,23 @@ type UserController struct {
 
 func NewUserController(userService *UserService) *UserController {
 	return &UserController{userService: userService}
+}
+
+func RegisterRoutes(router *gin.RouterGroup) {
+	repo := NewUserRepository()
+	service := NewUserService(repo)
+	controller := NewUserController(service)
+
+	// Auth-protected
+	userRouter := router.Group("/user").Use(Middleware.AuthMiddleware())
+	userRouter.GET("", controller.GetAllUsers)
+	userRouter.GET("/:userId", controller.GetUserById)
+	userRouter.PUT("/:userId", controller.UpdateUser)
+	userRouter.PATCH("/:userId", controller.ChangeActiveStatus)
+	userRouter.PUT("/:userId/password", controller.ChangePassword)
+
+	// Public
+	router.POST("/user", controller.CreateUser)
 }
 
 // @Summary      Create user
